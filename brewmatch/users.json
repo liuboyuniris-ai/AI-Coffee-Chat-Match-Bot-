@@ -1,0 +1,28 @@
+{
+    "irisyu": {
+        "id": "irisyu",
+        "name": "Iris Liu",
+        "role": "Business of Cinematic Arts Freshmen@USC",
+        "pitch": "",
+        "goals": [
+            "Career advice",
+            "Internship tips",
+            "Startup ideas"
+        ],
+        "resume_text": "Analyzed content from Boyun Liu Resume Latest.pdf... [Ready for AI Twin creation]",
+        "password": "Bnu747601cuc"
+    },
+    "byu": {
+        "id": "byu",
+        "name": "yuyu",
+        "role": "Film Production Junior @USC",
+        "pitch": "",
+        "goals": [
+            "Career advice",
+            "Internship tips",
+            "Mentorship"
+        ],
+        "resume_text": "I am majoring in Film Production, I am interested in entertainment industry such as Netflix.",
+        "password": "Bnu747601cuc"
+    }
+}

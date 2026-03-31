@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewMatch — AI Coffee Chat Matching App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #F5F0E8;
+            --espresso: #2C1A0E;
+            --coffee: #6B3D1E;
+            --latte: #C49A6C;
+            --foam: #FAF7F2;
+            --green: #2D5A3D;
+            --amber: #D4860A;
+            --border-radius: 24px;
+            --shadow: 0 4px 20px rgba(44, 26, 14, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--cream);
+            color: var(--espresso);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Instrument Serif', serif;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(245, 240, 232, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(44, 26, 14, 0.05);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Instrument Serif', serif;
+            font-size: 24px;
+            text-decoration: none;
+            color: var(--espresso);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--latte);
+            border-radius: 50%;
+            margin-top: 4px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            background: var(--foam);
+            padding: 6px;
+            border-radius: 32px;
+            border: 1px solid rgba(44, 26, 14, 0.05);
+        }
+
+        .nav-tab {
+            padding: 8px 18px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            background: transparent;
+            color: var(--coffee);
+        }
+
+        .nav-tab.active {
+            background: var(--espresso);
+            color: var(--foam);
+        }
+
+        /* --- Global Components --- */
+        .page {
+            display: none;
+            padding: 40px 0 100px;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        button {
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--espresso);
+            color: var(--foam);
+            border: none;
+            padding: 12px 28px;
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 26, 14, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--espresso);
+            border: 1.5px solid var(--espresso);
+            padding: 10px 24px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+        }
+
+        .btn-outline:hover {
+            background: rgba(44, 26, 14, 0.05);
+        }
+
+        .card {
+            background: var(--foam);
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid rgba(44, 26, 14, 0.05);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 42px;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--latte);
+            margin-bottom: 40px;
+        }
+
+        /* --- Page 1: My Profile --- */
+        .upload-area {
+            border: 1.5px dashed var(--latte);
+            background: rgba(212, 134, 10, 0.03);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .upload-area:hover {
+            background: rgba(212, 134, 10, 0.08);
+            border-style: solid;
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--latte);
+            margin-bottom: 8px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            background: var(--foam);
+            border: 1px solid rgba(44, 26, 14, 0.1);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--espresso);
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--latte);
+            background: #fff;
+        }
+
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .chip {
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: #fff;
+            border: 1px solid rgba(44, 26, 14, 0.1);
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--coffee);
+        }
+
+        .chip.selected {
+            background: var(--espresso);
+            color: var(--foam);
+            border-color: var(--espresso);
+        }
+
+        .avatar-preview {
+            margin-top: 40px;
+            background: rgba(45, 90, 61, 0.05);
+            border: 1px solid rgba(45, 90, 61, 0.1);
+            padding: 24px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .avatar-emoji { font-size: 48px; }
+        .avatar-info h4 { font-style: italic; font-size: 20px; }
+        .avatar-info p { font-size: 14px; opacity: 0.8; }
+
+        /* --- Page 2 & 3: Person Grids --- */
+        .person-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .person-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(44, 26, 14, 0.05);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .person-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(44, 26, 14, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .emoji-circle {
+            width: 48px;
+            height: 48px;
+            background: var(--foam);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .person-name {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .person-role {
+            font-size: 14px;
+            color: var(--latte);
+        }
+
+        .person-bio {
+            font-size: 14px;
+            margin-bottom: 16px;
+            color: var(--coffee);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .small-tag {
+            font-size: 11px;
+            background: var(--foam);
+            padding: 4px 10px;
+            border-radius: 12px;
+            color: var(--latte);
+            font-weight: 500;
+        }
+
+        /* --- Score Badge (Event Page) --- */
+        .score-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .score-high { background: var(--green); }
+        .score-med { background: var(--amber); }
+        .score-low { background: #bbb; }
+
+        /* --- Event Header --- */
+        .event-header {
+            background: var(--espresso);
+            color: var(--foam);
+            border-radius: 32px;
+            padding: 40px;
+            margin-bottom: 40px;
+            background-image: radial-gradient(circle at top right, rgba(255,255,255,0.05) 0%, transparent 60%);
+        }
+
+        .event-info { margin-bottom: 24px; }
+        .event-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 8px;
+        }
+
+        /* --- Modal --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 26, 14, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-card {
+            background: var(--foam);
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            border-radius: 32px;
+            position: relative;
+            overflow-y: auto;
+            animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.95) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .modal-content {
+            padding: 40px;
+        }
+
+        /* --- Bot Chat Styles --- */
+        .chat-container {
+            margin: 24px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .bubble.a {
+            align-self: flex-end;
+            background: var(--espresso);
+            color: var(--foam);
+            border-bottom-right-radius: 4px;
+        }
+
+        .bubble.b {
+            align-self: flex-start;
+            background: #fff;
+            color: var(--coffee);
+            border: 1px solid rgba(44, 26, 14, 0.05);
+            border-bottom-left-radius: 4px;
+        }
+
+        /* --- Score Ring --- */
+        .score-circle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .score-ring {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .score-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-ring circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        .score-ring .bg { stroke: rgba(44, 26, 14, 0.05); }
+        .score-ring .progress {
+            stroke: var(--green);
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Instrument Serif', serif;
+            font-size: 32px;
+        }
+
+        /* --- Loading State --- */
+        .loading-container {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .coffee-cup {
+            font-size: 64px;
+            display: inline-block;
+            animation: bounce 1.2s infinite ease-in-out;
+            margin-bottom: 16px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+        }
+
+        /* --- Toast --- */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #fff;
+            border-left: 4px solid var(--green);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            transition: transform 0.4s cubic-bezier(0.17, 0.84, 0.44, 1);
+            z-index: 3000;
+        }
+
+        .toast.visible {
+            transform: translateY(0);
+        }
+
+        /* --- Specific Items --- */
+        .result-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .result-list li {
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--coffee);
+        }
+
+        .result-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--latte);
+            font-weight: bold;
+        }
+
+        .spacer-small { height: 16px; }
+        .spacer-med { height: 32px; }
+
+        .hidden { display: none !important; }
+
+        /* --- Welcome/Login Screen --- */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--cream);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .welcome-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 48px;
+            text-align: center;
+        }
+
+        .welcome-logo {
+            font-family: 'Instrument Serif', serif;
+            font-size: 48px;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .login-form {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .user-meta-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--latte);
+        }
+
+        #logout-btn {
+            font-size: 12px;
+            color: var(--amber);
+            background: none;
+            border: none;
+            text-decoration: underline;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="welcome-card card">
+            <h1 class="welcome-logo">BrewMatch <span class="logo-dot"></span></h1>
+            <p style="color: var(--latte);">AI-powered coffee chat matching.</p>
+            
+            <div class="login-form">
+                <div class="form-group" style="text-align: left;">
+                    <label>Username or Email</label>
+                    <input type="text" id="login-id" placeholder="Enter username...">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Password</label>
+                    <input type="password" id="login-pass" placeholder="Enter password (saved on first login)">
+                </div>
+                <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="auth()">
+                    Enter BrewMatch
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="hidden" id="main-nav">
+        <div class="container nav-content">
+            <a href="#" class="logo">BrewMatch <span class="logo-dot"></span></a>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showPage('my-profile')">My Profile</button>
+                <button class="nav-tab" onclick="showPage('discover')">Discover</button>
+                <button class="nav-tab" onclick="showPage('events')">Events</button>
+                <button class="nav-tab" onclick="showPage('connections')">Connections</button>
+            </div>
+            <div class="user-meta-nav">
+                <span id="nav-user-name"></span>
+                <button id="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container hidden" id="main-content">
+        
+        <!-- Page 1: My Profile -->
+        <section id="my-profile" class="page active">
+            <h1 class="section-title">Your AI Twin</h1>
+            <p class="section-subtitle">Upload your resume and tell your bot who you are — it'll chat on your behalf.</p>
+
+            <!-- Notifications / Inbox -->
+            <div id="inbox-container" class="hidden" style="margin-bottom: 40px;">
+                <h3 style="font-style: italic; margin-bottom: 16px; color: var(--amber);">📩 Pending Connection Requests</h3>
+                <div id="requests-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+            </div>
+
+            <div class="card">
+                <label>Resume</label>
+                <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+                    <div id="upload-prompt">
+                        <span class="upload-icon">📄</span>
+                        <p><strong>Click to upload</strong> your resume or paste text below</p>
+                    </div>
+                    <div id="upload-status" class="hidden">
+                        <span class="upload-icon" style="color: var(--green);">✅</span>
+                        <p><strong id="filename-display">resume.pdf</strong> has been attached!</p>
+                        <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center;">
+                            <span class="btn-outline" style="padding: 4px 12px; font-size: 12px; cursor: pointer;">Replace</span>
+                            <span class="btn-outline" style="padding: 4px 12px; font-size: 12px; color: #ff6b6b; border-color: #ff6b6b; cursor: pointer;" onclick="event.stopPropagation(); deleteResume();">Delete</span>
+                        </div>
+                    </div>
+                    <input type="file" id="file-input" class="hidden">
+                </div>
+
+                <div class="form-group">
+                    <label>Or Paste Resume Text</label>
+                    <textarea id="resume-text" rows="4" placeholder="Paste your resume, LinkedIn summary, or just describe your background..."></textarea>
+                </div>
+
+                <div class="spacer-med"></div>
+
+                <h2 style="font-size: 28px; font-style: italic; margin-bottom: 24px;">About You</h2>
+                
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="user-name" placeholder="e.g. Alex Chen">
+                </div>
+
+                <div class="form-group">
+                    <label>Current Role / Status</label>
+                    <input type="text" id="user-role" placeholder="e.g. CS student @ UCLA, SWE Intern @ Stripe">
+                </div>
+
+                <div class="form-group">
+                    <label>What are you looking for?</label>
+                    <div class="chip-group" id="goal-chips">
+                        <div class="chip" data-val="Full-time referrals">Full-time referrals</div>
+                        <div class="chip" data-val="Career advice">Career advice</div>
+                        <div class="chip" data-val="Internship tips">Internship tips</div>
+                        <div class="chip" data-val="Startup ideas">Startup ideas</div>
+                        <div class="chip" data-val="Research collaboration">Research collaboration</div>
+                        <div class="chip" data-val="Mentorship">Mentorship</div>
+                        <div class="chip" data-val="Tech industry insights">Tech industry insights</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Elevator Pitch (For your bot)</label>
+                    <textarea id="user-pitch" rows="4" placeholder="I'm a junior at UCLA studying CS with a focus on distributed systems..."></textarea>
+                </div>
+
+                <button class="btn-primary" onclick="createAvatar()">
+                    <span>☕</span> Create My AI Twin
+                </button>
+
+                <div id="avatar-preview-container" class="hidden">
+                    <div class="avatar-preview">
+                        <div class="avatar-emoji">🤖</div>
+                        <div class="avatar-info">
+                            <h4 id="preview-name">Your Twin</h4>
+                            <p id="preview-summary">Ready to find matches.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page 2: Discover -->
+        <section id="discover" class="page">
+            <h1 class="section-title">Find Your Match</h1>
+            <p class="section-subtitle">Let your bot screen coffee chats before you commit.</p>
+            
+            <div class="person-grid" id="people-grid">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- Page 3: Events -->
+        <section id="events" class="page">
+            <h1 class="section-title">Networking Events</h1>
+            <p class="section-subtitle">See who's at the event and who you should talk to first.</p>
+
+            <div class="event-header">
+                <div class="event-info">
+                    <h2 style="font-size: 32px;">UCLA Tech Industry Night 2025</h2>
+                    <div class="event-meta">
+                        <span>📍 Luskin Conference Center</span>
+                        <span>•</span>
+                        <span>👥 32 attendees</span>
+                        <span>•</span>
+                        <span>🕒 Tonight 6–9pm</span>
+                    </div>
+                </div>
+                <button class="btn-primary" style="background: var(--latte); color: var(--espresso);" onclick="runEventMatch()">
+                    ✨ Auto-match everyone (AI)
+                </button>
+            </div>
+
+            <div class="person-grid" id="event-grid">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- Page 4: Connections -->
+        <section id="connections" class="page">
+            <h1 class="section-title">My Connections</h1>
+            <p class="section-subtitle">These are the pairs where both bots (and humans) have agreed to connect.</p>
+            
+            <div class="person-grid" id="connections-grid">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Modal for Match Results -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-content" id="modal-body">
+                <!-- Loading State or Results -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toast-emoji">✅</span>
+        <span id="toast-msg">Success!</span>
+    </div>
+
+    <script>
+        // State
+        let currentUser = null; // Will hold the profile object: {id, name, role, ...}
+        let allPeople = [];
+        let eventPeople = [];
+
+        // --- Auth Logic ---
+        async function initAuth() {
+            const savedId = localStorage.getItem('bm_userid');
+            if (savedId) {
+                try {
+                    const res = await fetch(`/api/me/${savedId}`);
+                    if (res.ok) {
+                        currentUser = await res.json();
+                        setupApp();
+                    } else {
+                        localStorage.removeItem('bm_userid');
+                    }
+                } catch (e) {
+                    console.error("Auth error", e);
+                }
+            }
+        }
+
+        async function auth() {
+            const username = document.getElementById('login-id').value.trim();
+            const password = document.getElementById('login-pass').value.trim();
+            if (!username || !password) {
+                showToast("Please enter username and password", "⚠️");
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username, password })
+                });
+                
+                if (res.status === 401) {
+                    showToast("Invalid password", "❌");
+                    return;
+                }
+                
+                currentUser = await res.json();
+                localStorage.setItem('bm_userid', currentUser.id);
+                setupApp();
+                showToast(`Welcome back, ${currentUser.name || currentUser.id}!`);
+            } catch (err) {
+                showToast("Login failed", "❌");
+            }
+        }
+
+        function setupApp() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('main-nav').classList.remove('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            
+            document.getElementById('nav-user-name').textContent = currentUser.name || currentUser.id;
+            
+            // Populate profile form if exists
+            if (currentUser.name) {
+                document.getElementById('user-name').value = currentUser.name;
+                document.getElementById('user-role').value = currentUser.role;
+                document.getElementById('user-pitch').value = currentUser.pitch;
+                document.getElementById('resume-text').value = currentUser.resume_text;
+                
+                // Select goals
+                document.querySelectorAll('#goal-chips .chip').forEach(chip => {
+                    if (currentUser.goals && currentUser.goals.includes(chip.getAttribute('data-val'))) {
+                        chip.classList.add('selected');
+                    }
+                });
+
+                document.getElementById('avatar-preview-container').classList.remove('hidden');
+                document.getElementById('preview-name').textContent = `${currentUser.name}'s AI Twin`;
+            }
+            
+            loadInteractions();
+            showPage('my-profile');
+        }
+
+        function logout() {
+            localStorage.removeItem('bm_userid');
+            window.location.reload();
+        }
+
+        // --- Navigation ---
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            const index = ['my-profile', 'discover', 'events', 'connections'].indexOf(pageId);
+            document.querySelectorAll('.nav-tab')[index].classList.add('active');
+
+            if (pageId === 'discover') loadPeople();
+            if (pageId === 'events') loadEventPeople();
+            if (pageId === 'connections') renderConnections();
+            
+            // Auto-refresh interactions when switching pages
+            loadInteractions();
+        }
+
+        // --- Profile Logic ---
+        document.querySelectorAll('#goal-chips .chip').forEach(chip => {
+            chip.onclick = () => chip.classList.toggle('selected');
+        });
+
+        async function createAvatar() {
+            const name = document.getElementById('user-name').value;
+            const role = document.getElementById('user-role').value;
+            const pitch = document.getElementById('user-pitch').value;
+            const resume_text = document.getElementById('resume-text').value;
+            const goals = Array.from(document.querySelectorAll('#goal-chips .chip.selected')).map(c => c.getAttribute('data-val'));
+
+            if (!name || !role) {
+                showToast('Please enter your name and role', '⚠️');
+                return;
+            }
+
+            const profile = { id: currentUser.id, name, role, pitch, goals, resume_text };
+            
+            try {
+                const res = await fetch('/api/create-avatar', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(profile)
+                });
+                const data = await res.json();
+                
+                currentUser = data.profile;
+                document.getElementById('avatar-preview-container').classList.remove('hidden');
+                document.getElementById('preview-name').textContent = `${name}'s AI Twin`;
+                document.getElementById('preview-summary').textContent = data.avatar_summary;
+                document.getElementById('nav-user-name').textContent = name;
+                
+                showToast('Profile updated and saved!');
+            } catch (err) {
+                showToast('Error saving profile', '❌');
+            }
+        }
+
+        // --- Data Loading ---
+        async function loadPeople() {
+            const res = await fetch('/api/people');
+            allPeople = await res.json();
+            renderGrid(allPeople, 'people-grid');
+        }
+
+        async function loadEventPeople() {
+            if (eventPeople.length > 0) return; // Only load once
+            const res = await fetch('/api/event-people');
+            eventPeople = await res.json();
+            renderGrid(eventPeople, 'event-grid', true);
+        }
+
+        let interactionData = { requests: [], connections: [] };
+
+        async function loadInteractions() {
+            if (!currentUser) return;
+            try {
+                const res = await fetch(`/api/interactions/${currentUser.id}`);
+                interactionData = await res.json();
+                renderInbox();
+            } catch (e) { console.error("Interactions load error", e); }
+        }
+
+        function renderInbox() {
+            const container = document.getElementById('inbox-container');
+            const list = document.getElementById('requests-list');
+            
+            if (interactionData.requests.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+            
+            container.classList.remove('hidden');
+            list.innerHTML = interactionData.requests.map(req => `
+                <div class="card" style="padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; background: #fff;">
+                    <div>
+                        <strong style="font-size: 16px;">${req.name}</strong> 
+                        <span style="font-size: 13px; color: var(--latte); margin-left: 8px;">wants their AI twin to chat with yours</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-primary" style="padding: 6px 16px; font-size: 13px;" onclick="respondRequest('${req.id}', 'accept')">Accept</button>
+                        <button class="btn-outline" style="padding: 6px 16px; font-size: 13px;" onclick="respondRequest('${req.id}', 'decline')">Decline</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function respondRequest(senderId, action) {
+            try {
+                await fetch('/api/respond-request', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        user_id: currentUser.id,
+                        sender_id: senderId,
+                        action: action
+                    })
+                });
+                showToast(action === 'accept' ? 'Connected!' : 'Request declined');
+                loadInteractions();
+            } catch (e) { showToast('Action failed', '❌'); }
+        }
+
+        function renderConnections() {
+            const grid = document.getElementById('connections-grid');
+            
+            if (interactionData.connections.length === 0) {
+                grid.innerHTML = `<div style="text-align: center; grid-column: 1/-1; padding: 40px; color: var(--latte);">No connections yet. Go to Discover to find matches!</div>`;
+                return;
+            }
+            
+            renderGrid(interactionData.connections, 'connections-grid');
+        }
+
+        function renderGrid(data, containerId, isEvent = false) {
+            const grid = document.getElementById(containerId);
+            const isConnectionsPage = containerId === 'connections-grid';
+
+            grid.innerHTML = data.map(person => {
+                const isConnected = interactionData.connections.some(c => c.id.toLowerCase() === person.id.toLowerCase());
+                const isRequested = interactionData.requests.some(r => r.id === person.id.toLowerCase());
+                
+                return `
+                <div class="person-card" onclick="${isEvent ? `openEventAttendee('${person.id}')` : ''}">
+                    ${isEvent ? `<div class="score-badge ${getScoreClass(person.score)}">${person.score}</div>` : ''}
+                    <div class="card-header">
+                        <div class="emoji-circle">${person.emoji || '☕'}</div>
+                        <div>
+                            <div class="person-name">${person.name}</div>
+                            <div class="person-role">${person.role}</div>
+                        </div>
+                    </div>
+                    <div class="person-bio">${person.pitch}</div>
+                    <div class="card-tags">
+                        ${(person.tags || []).map(t => `<span class="small-tag">${t}</span>`).join('')}
+                    </div>
+                    ${!isEvent ? `
+                        ${isConnected ? `
+                            <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="startMatch('${person.id}')">
+                                <span>🤖</span> Let's chat (AI Twin ready)
+                            </button>
+                        ` : `
+                            <button class="btn-outline" style="width: 100%; justify-content: center; ${isRequested ? 'opacity: 0.6; cursor: default;' : ''}" 
+                                onclick="${isRequested ? '' : `sendConnectionRequest('${person.id}')`}">
+                                <span>☕</span> ${isRequested ? 'Request Sent' : 'Request bot chat'}
+                            </button>
+                        `}
+                    ` : ''}
+                </div>
+            `;}).join('');
+        }
+
+        function getScoreClass(score) {
+            if (score >= 80) return 'score-high';
+            if (score >= 50) return 'score-med';
+            return 'score-low';
+        }
+
+        // --- Matching Logic ---
+        async function sendConnectionRequest(personId) {
+            if (!currentUser) {
+                showToast('Please login first', '⚠️');
+                return;
+            }
+            try {
+                await fetch('/api/request-chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        sender_id: currentUser.id,
+                        recipient_id: personId
+                    })
+                });
+                showToast('Request sent!');
+                loadPeople(); // Refresh grid state
+            } catch (e) { showToast('Failed to send request', '❌'); }
+        }
+
+        async function startMatch(personId) {
+            if (!currentUser) {
+                showToast('Please create your profile first', '⚠️');
+                showPage('my-profile');
+                return;
+            }
+
+            openModal();
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="loading-container">
+                    <span class="coffee-cup">☕</span>
+                    <h2 style="font-style: italic;">Brewing conversation...</h2>
+                    <p style="color: var(--latte);">Bots are having a discovery chat.</p>
+                </div>
+            `;
+
+            try {
+                const res = await fetch('/api/match', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ 
+                        person_id: personId,
+                        user_id: currentUser.id
+                    })
+                });
+                const result = await res.json();
+                renderMatchResult(result);
+            } catch (err) {
+                modalBody.innerHTML = `<p>Error fetching match results. Please try again.</p>`;
+            }
+        }
+
+        function renderMatchResult(data) {
+            const modalBody = document.getElementById('modal-body');
+            const circumference = 2 * Math.PI * 52;
+            const offset = circumference - (data.score / 100) * circumference;
+            const progressColor = data.score >= 80 ? 'var(--green)' : (data.score >= 50 ? 'var(--amber)' : '#bbb');
+
+            modalBody.innerHTML = `
+                <div class="score-circle-container">
+                    <div class="score-ring">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="52"></circle>
+                            <circle class="progress" cx="60" cy="60" r="52" 
+                                style="stroke-dasharray: ${circumference}; stroke-dashoffset: ${offset}; stroke: ${progressColor};"></circle>
+                        </svg>
+                        <div class="score-text">${data.score}</div>
+                    </div>
+                    <h2 style="font-size: 28px; margin-top: 16px;">${data.verdict}</h2>
+                </div>
+
+                <h3 style="font-size: 20px; font-style: italic; border-bottom: 1px solid rgba(44,26,14,0.1); padding-bottom: 8px;">Bot-to-Bot Insight</h3>
+                <div class="chat-container">
+                    ${data.conversation.map(c => `
+                        <div class="bubble ${c.speaker.toLowerCase()}">${c.text}</div>
+                    `).join('')}
+                </div>
+
+                <div class="spacer-med"></div>
+                <h3 style="font-size: 18px; font-style: italic;">Why it's a match</h3>
+                <ul class="result-list">
+                    ${data.reasons.map(r => `<li>${r}</li>`).join('')}
+                </ul>
+
+                <div class="spacer-small"></div>
+                <h3 style="font-size: 18px; font-style: italic;">Icebreakers</h3>
+                <ul class="result-list">
+                    ${data.starters.map(s => `<li>${s}</li>`).join('')}
+                </ul>
+
+                <div class="spacer-small"></div>
+                <h3 style="font-size: 18px; font-style: italic; color: #888;">Potential Friction</h3>
+                <ul class="result-list" style="opacity: 0.7;">
+                    ${data.friction.map(f => `<li>${f}</li>`).join('')}
+                </ul>
+
+                <div style="display: flex; gap: 12px; margin-top: 40px;">
+                    <button class="btn-primary" style="flex: 1; justify-content: center;" onclick="requestChat()">Request coffee chat</button>
+                    <button class="btn-outline" style="flex: 1;" onclick="closeModal()">Pass</button>
+                </div>
+            `;
+        }
+
+        async function runEventMatch() {
+            if (!currentUser) {
+                showToast('Please create your profile first', '⚠️');
+                showPage('my-profile');
+                return;
+            }
+
+            showToast('Analyzing 1:9 in parallel...', '✨');
+            
+            try {
+                const res = await fetch('/api/event-match', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(currentUser)
+                });
+                eventPeople = await res.json();
+                renderGrid(eventPeople, 'event-grid', true);
+                showToast('Matches updated!');
+            } catch (err) {
+                showToast('Error running parallel match', '❌');
+            }
+        }
+
+        function openEventAttendee(id) {
+            const attendee = eventPeople.find(p => p.id === id);
+            openModal();
+            const modalBody = document.getElementById('modal-body');
+            
+            modalBody.innerHTML = `
+                <div class="card-header" style="margin-bottom: 24px;">
+                    <div class="emoji-circle" style="width: 64px; height: 64px; font-size: 32px;">${attendee.emoji}</div>
+                    <div>
+                        <div class="person-name" style="font-size: 24px;">${attendee.name}</div>
+                        <div class="person-role" style="font-size: 16px;">${attendee.role}</div>
+                    </div>
+                </div>
+                <p style="color: var(--coffee); margin-bottom: 24px;">${attendee.pitch}</p>
+                <div style="background: rgba(44, 26, 14, 0.05); padding: 20px; border-radius: 16px; margin-bottom: 32px; text-align: center;">
+                    <div style="font-size: 14px; color: var(--latte); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">AI Score</div>
+                    <div style="font-family: 'Instrument Serif'; font-size: 48px; color: ${getScoreColor(attendee.score)};">${attendee.score}</div>
+                </div>
+                <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="startMatch('${attendee.id}')">
+                    Deep dive (bot chat)
+                </button>
+            `;
+        }
+
+        function getScoreColor(score) {
+            if (score >= 80) return 'var(--green)';
+            if (score >= 50) return 'var(--amber)';
+            return '#bbb';
+        }
+
+        // --- UI Utils ---
+        function openModal() {
+            document.getElementById('modal-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function showToast(msg, emoji = '✅') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            document.getElementById('toast-emoji').textContent = emoji;
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 3000);
+        }
+
+        function requestChat() {
+            showToast('Request sent! ☕');
+            closeModal();
+        }
+
+        // --- File Upload Logic ---
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('upload-prompt').classList.add('hidden');
+                document.getElementById('upload-status').classList.remove('hidden');
+                document.getElementById('filename-display').textContent = file.name;
+                
+                // Optional: You can simulate extracting text from PDF/Docx here
+                // For now, let's just make it feel interactive
+                if (!document.getElementById('resume-text').value) {
+                    document.getElementById('resume-text').value = `Analyzed content from ${file.name}... [Ready for AI Twin creation]`;
+                }
+                
+                showToast(`File "${file.name}" attached!`);
+            }
+        });
+
+        function deleteResume() {
+            document.getElementById('file-input').value = '';
+            document.getElementById('upload-status').classList.add('hidden');
+            document.getElementById('upload-prompt').classList.remove('hidden');
+            document.getElementById('resume-text').value = '';
+            showToast('Resume removed', '🗑️');
+        }
+
+        // Initialize
+        initAuth();
+
+    </script>
+</body>
+</html>

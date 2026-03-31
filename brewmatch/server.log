@@ -1,0 +1,65 @@
+INFO:     Started server process [32319]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57537 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57537 - "GET /api/me/tester HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57539 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57554 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57554 - "GET /api/people HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57557 - "POST /api/bot-request HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57557 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57557 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57557 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57559 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57582 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57586 - "GET /api/people HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57589 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57589 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57591 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57599 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57599 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57601 - "GET /api/people HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57607 - "POST /api/bot-request HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57612 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57612 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57614 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57634 - "GET /api/event-people HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57640 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57643 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57643 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57645 - "GET /api/people HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57645 - "POST /api/bot-request HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57656 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57656 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57658 - "GET /api/bot-requests/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57661 - "POST /api/bot-accept HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57678 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57678 - "GET /api/me/irisyu HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57678 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57678 - "GET /api/me/irisyu HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57710 - "POST /api/bot-request HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57712 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57719 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57719 - "GET /api/me/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57719 - "GET /api/bot-requests/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57721 - "GET /api/bot-requests/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57721 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57723 - "POST /api/auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57723 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/me/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57732 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57732 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57732 - "GET /api/bot-requests/sarah HTTP/1.1" 200 OK

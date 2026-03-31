@@ -1,0 +1,63 @@
+{
+    "requests": {
+        "irisyu": [],
+        "byu": []
+    },
+    "requests_human": {
+        "byu": []
+    },
+    "connections": {
+        "byu": [
+            "irisyu"
+        ],
+        "irisyu": [
+            "byu"
+        ]
+    },
+    "bot_chats": {
+        "irisyu": [
+            "byu"
+        ],
+        "byu": [
+            "irisyu"
+        ]
+    },
+    "reports": {
+        "byu:irisyu": {
+            "conversation": [
+                {
+                    "speaker": "A",
+                    "text": "Hey yuyu, as a BCA freshman, I'm really interested in your experience as a Film Production Junior and was wondering if you have any tips on getting involved with student films early on."
+                },
+                {
+                    "speaker": "B",
+                    "text": "Oh, absolutely, Iris! As a Film Production junior, I totally get wanting to jump in early; honestly, the best advice is to just go to every student film call you see and offer to help with anything, even if it's just craft services. That's truly how you learn the ropes and start building your network at USC."
+                },
+                {
+                    "speaker": "A",
+                    "text": "That's incredibly practical advice, and I'm definitely going to keep it in mind. I'm curious, from your own experience helping out on those early projects, how did you eventually pinpoint your specific passion or the production role you wanted to specialize in?"
+                },
+                {
+                    "speaker": "B",
+                    "text": "That's a fantastic question, and honestly, it's a whole journey of trial and error I'd love to chat more about! I'd be happy to share my full story and answer any other questions you have if we could grab coffee on campus sometime soon."
+                }
+            ],
+            "score": 87,
+            "verdict": "Wait and See",
+            "reasons": [
+                "Shared background in technical systems",
+                "Aligned interests in career growth",
+                "Complementary skill sets"
+            ],
+            "starters": [
+                "Ask about yuyu's journey to their current role.",
+                "Discuss recent trends in fintech and payments."
+            ],
+            "friction": [
+                "Timezone differences might be a factor.",
+                "Different stages of career might mean different priorities."
+            ],
+            "type": "complete"
+        }
+    }
+}
