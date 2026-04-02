@@ -1,0 +1,23 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+build/
+dist/
+*.egg-info/
+
+# Local Data (Optional: Keep these if you want pre-seeded users, exclude if personal)
+# interactions.json
+# users.json
+# messages.json
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
